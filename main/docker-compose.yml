@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:8.0.29
+    platform: linux/amd64
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "1"
+      TZ: Asia/Tokyo
+    volumes:
+      - ./infra/db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - sample_server_2022_db_data:/var/lib/mysql
+    ports:
+      - 3306:3306
+
+volumes:
+  sample_server_2022_db_data:
+    driver: local

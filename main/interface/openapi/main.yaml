@@ -1,0 +1,183 @@
+openapi: 3.1.0
+x-stoplight:
+  id: pfcrt2oyqco9a
+info:
+  title: main
+  version: '1.0'
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  '/users/{userId}':
+    parameters:
+      - schema:
+          type: integer
+        name: userId
+        in: path
+        required: true
+        description: Id of an existing user.
+    get:
+      summary: Get User Info by User ID
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              examples:
+                example-1:
+                  value:
+                    id: 0
+                    name: sample
+                    email: sample@example.com
+                    status: active
+      operationId: get-users-userId
+      description: Retrieve the information of the user with the matching user ID.
+      parameters: []
+    patch:
+      summary: Update User Information
+      operationId: patch-users-userId
+      responses:
+        '200':
+          description: User Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              examples:
+                Updated User Rebecca Baker:
+                  value:
+                    id: 13
+                    firstName: Rebecca
+                    lastName: Baker
+                    email: rebecca@gmail.com
+                    dateOfBirth: '1985-10-02'
+                    emailVerified: false
+                    createDate: '2019-08-24'
+        '404':
+          description: User Not Found
+        '409':
+          description: Email Already Taken
+      description: Update the information of an existing user.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                example-1:
+                  name: sample
+                  email: sample@example.com
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+              required:
+                - name
+            examples:
+              example-1:
+                value:
+                  name: sample
+                  email: sample@example.com
+        description: Patch user properties to update.
+  /user:
+    post:
+      summary: Create New User
+      operationId: post-user
+      responses:
+        '200':
+          description: User Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              examples:
+                New User Bob Fellow:
+                  value:
+                    id: 12
+                    firstName: Bob
+                    lastName: Fellow
+                    email: bob.fellow@gmail.com
+                    dateOfBirth: '1996-08-24'
+                    emailVerified: false
+                    createDate: '2020-11-18'
+        '400':
+          description: Missing Required Information
+        '409':
+          description: Email Already Taken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                example-1:
+                  id: 0
+                  name: sample
+                  email: sample@example.com
+                  status: active
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+              required:
+                - name
+                - email
+            examples:
+              example-1:
+                value:
+                  name: sample
+                  email: sample@example.com
+          application/xml:
+            schema:
+              type: object
+              properties: {}
+        description: Post the necessary fields for the API to create a new user.
+      description: Create a new user.
+  /healthcheck:
+    get:
+      summary: healthcheck
+      tags: []
+      operationId: get-healthcheck
+      description: healthcheck
+      x-internal: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                example-1:
+                  value: OK
+components:
+  schemas:
+    User:
+      title: User
+      type: object
+      description: ''
+      examples:
+        - id: 0
+          name: sample
+          email: sample@example.com
+          status: active
+      x-internal: true
+      properties:
+        id:
+          type: integer
+          format: int64
+          readOnly: true
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        state:
+          type: string
+      required:
+        - id
+        - name

@@ -1,0 +1,3 @@
+code,message
+not_found,指定されたリソースが見つかりませんでした。
+invalid_params,指定のパラメーターが不正です。
